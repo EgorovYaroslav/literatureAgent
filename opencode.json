@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "scihub": {
+      "command": "./Sci-Hub-MCP-Server/.venv/bin/python",
+      "args": ["./Sci-Hub-MCP-Server/sci_hub_server.py"]
+    }
+  }
+}
