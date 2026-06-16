@@ -14,22 +14,35 @@ We are setting up a new project to integrate the Sci-Hub MCP (Model Context Prot
    *(Note: Ensure Python 3.10+ is used. It requires FastMCP, requests, bs4, and scihub).*
 
 ## Step 2: Configure OpenCode MCP & Create Tool
-1. **MCP Configuration**: Create the standard configuration file for OpenCode (`opencode.json`) at the project root to register the `scihub` MCP server.
-   **CRITICAL**: The `command` must point to the Python executable *inside the virtual environment* (e.g., `./Sci-Hub-MCP-Server/.venv/bin/python` on Linux/macOS or `./Sci-Hub-MCP-Server/.venv/Scripts/python.exe` on Windows) so it can find the installed dependencies. Example structure:
+1. **MCP Configuration**: Create `opencode.json` at the project root to register the `scihub` MCP server.
+   **CRITICAL**: The `command` must point to the Python executable *inside the virtual environment*. Use the **array form** (the `command` field must be a list combining executable + arguments):
+
    ```json
-      {
-         "$schema": "https://opencode.ai/config.json",
-         "mcp": {
-            "scihub": {
-               "type": "local",
-               "enabled": true,
-               "command": "./Sci-Hub-MCP-Server/.venv/bin/python",
-               "args": ["./Sci-Hub-MCP-Server/sci_hub_server.py"]
-            }
+   {
+      "$schema": "https://opencode.ai/config.json",
+      "mcp": {
+         "scihub": {
+            "type": "local",
+            "enabled": true,
+            "command": ["./Sci-Hub-MCP-Server/.venv/bin/python", "./Sci-Hub-MCP-Server/sci_hub_server.py"]
          }
       }
+   }
    ```
-2. **Custom Tool Wrapper**: The project already contains a `tools/` folder with a script inside it. Read and inspect the existing `tools/scihub_tool.py` (and the underlying Sci-Hub MCP server logic if necessary). Ensure the script acts as a proper wrapper/tool definition that demonstrates how to programmatically initialize an MCP client, connect to the `scihub` server, and call its search/download functions.
+
+   This is the **official OpenCode format** — see https://opencode.ai/docs/mcp-servers. Do NOT use `"mcpServers"` (that is the Claude Desktop format), and do NOT split `command`/`args` into separate fields.
+
+2. **Fix the search module**: The cloned `Sci-Hub-MCP-Server/sci_hub_search.py` uses an outdated `scihub` Python library whose domain list is broken and whose domain-rotation logic crashes after finding a valid URL. **Replace the contents** of `Sci-Hub-MCP-Server/sci_hub_search.py` with the fixed version from the project's `tools/` directory or use the reference implementation below. The fix:
+   - Removes the dependency on the buggy `scihub` library
+   - Uses direct `requests` with proper session handling for DDOS-guard cookies
+   - Supports modern Sci-Hub mirrors (`sci-hub.ru`, `sci-hub.se`, etc.)
+   - Extracts PDF URLs from `<iframe>`, `<object>`, and `<a>` tags
+   - Normalizes relative, protocol-relative, and absolute URLs
+   - Fetches paper metadata from HTML `<meta>` tags
+
+   Reference: see `tools/scihub_tool.py` for the working HTTP logic, or the complete fixed `sci_hub_search.py` in the project.
+
+3. **Custom Tool Wrapper**: The project already contains a `tools/` folder with `scihub_tool.py`. Read and inspect it. It acts as a CLI wrapper that starts the MCP server as a subprocess, calls its tools, and falls back to direct HTTP if the MCP server fails.
 
 ## Step 3: Directory Setup
 1. Create a folder named `literature/` in the project root. This will be used to store source PDFs and downloaded articles.
@@ -49,6 +62,7 @@ Create an `AGENT.md` file in the project root. This file must describe the follo
 ## Execution Instructions for the Agent
 - Execute these steps sequentially.
 - Use `uv` for all virtual environment and package management tasks.
+- After cloning, **must fix** `Sci-Hub-MCP-Server/sci_hub_search.py` (replace the buggy scihub library usage with the direct-HTTP version).
 - Ensure all file paths in the `opencode.json` MCP configuration correctly resolve to the `.venv` python executable and the `sci_hub_server.py` script so the MCP server can start properly.
 - Verify that the `tools/scihub_tool.py` script is syntactically correct.
 - Ensure the `AGENT.md` is clearly formatted in Markdown so it can be easily parsed by any AI agent in the future.

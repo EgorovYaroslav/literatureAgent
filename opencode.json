@@ -4,8 +4,7 @@
     "scihub": {
       "type": "local",
       "enabled": true,
-      "command": "./Sci-Hub-MCP-Server/.venv/bin/python",
-      "args": ["./Sci-Hub-MCP-Server/sci_hub_server.py"]
+      "command": ["./Sci-Hub-MCP-Server/.venv/bin/python", "./Sci-Hub-MCP-Server/sci_hub_server.py"]
     }
   }
 }
