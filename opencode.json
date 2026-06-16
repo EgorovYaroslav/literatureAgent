@@ -1,6 +1,9 @@
 {
-  "mcpServers": {
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": {
     "scihub": {
+      "type": "local",
+      "enabled": true,
       "command": "./Sci-Hub-MCP-Server/.venv/bin/python",
       "args": ["./Sci-Hub-MCP-Server/sci_hub_server.py"]
     }

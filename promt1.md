@@ -17,14 +17,17 @@ We are setting up a new project to integrate the Sci-Hub MCP (Model Context Prot
 1. **MCP Configuration**: Create the standard configuration file for OpenCode (`opencode.json`) at the project root to register the `scihub` MCP server.
    **CRITICAL**: The `command` must point to the Python executable *inside the virtual environment* (e.g., `./Sci-Hub-MCP-Server/.venv/bin/python` on Linux/macOS or `./Sci-Hub-MCP-Server/.venv/Scripts/python.exe` on Windows) so it can find the installed dependencies. Example structure:
    ```json
-   {
-     "mcpServers": {
-       "scihub": {
-         "command": "./Sci-Hub-MCP-Server/.venv/bin/python",
-         "args": ["./Sci-Hub-MCP-Server/sci_hub_server.py"]
-       }
-     }
-   }
+      {
+         "$schema": "https://opencode.ai/config.json",
+         "mcp": {
+            "scihub": {
+               "type": "local",
+               "enabled": true,
+               "command": "./Sci-Hub-MCP-Server/.venv/bin/python",
+               "args": ["./Sci-Hub-MCP-Server/sci_hub_server.py"]
+            }
+         }
+      }
    ```
 2. **Custom Tool Wrapper**: Create a new folder named `tools/` in the project root. Inside this folder, create a Python script named `scihub_tool.py`. This script should act as a wrapper/tool definition that demonstrates how to programmatically initialize an MCP client, connect to the `scihub` server, and call its search/download functions. Include clear comments explaining how it interacts with the MCP server.
 

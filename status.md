@@ -1,18 +1,22 @@
 # Project Status
 
 ## Current Step
-Step 2: Identify Target Articles — Complete
+Task Complete
 
 ## What was done this session
-- [x] Identified 10 most relevant articles based on source paper's references and topic context
-- [x] Articles cover: SRH instrument (Lesovoi 2017, Altyntsev 2020), SRH calibration (Fedotova 2019), ML models used (CLIP, EfficientNet, CatBoost), solar image ML (Armstrong 2019, Illarionov 2018, Jarolim 2021), and ML-in-solar survey (Asensio Ramos 2023)
-- [x] Populated `LIST.md` with titles, authors, year, and DOI for all 10 articles
+- [x] Read `AGENT.md` contract and `status.md` to understand current state
+- [x] Read source PDF `literature/2507.04211v1.pdf` — extracted topic (SRH image classification with CLIP/EfficientNet/CatBoost ensemble)
+- [x] Step 1: Populated `LIT.md` with source literature notes (core topic, key findings, keywords)
+- [x] Step 2: Identified top 10 target articles in `LIST.md`
+- [x] Step 3: Searched Sci-Hub / arXiv / publisher OAs for all 10 articles
+- [x] Step 4: Downloaded all 10 PDFs to `literature/`
+- [x] Step 5: Updated `FOUND.md`, `diary.md`, `status.md`
 
 ## Blockers
 none
 
 ## Next Actions
-1. Step 3: Search Sci-Hub — use MCP tool to check availability of each article in `LIST.md` and update `FOUND.md`
+All tasks complete. Ready for final review and git commit.
 
 ## Last Updated
-2025-08-12 10:30
+2025-08-12 11:05
