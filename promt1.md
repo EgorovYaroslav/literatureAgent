@@ -29,7 +29,7 @@ We are setting up a new project to integrate the Sci-Hub MCP (Model Context Prot
          }
       }
    ```
-2. **Custom Tool Wrapper**: Create a new folder named `tools/` in the project root. Inside this folder, create a Python script named `scihub_tool.py`. This script should act as a wrapper/tool definition that demonstrates how to programmatically initialize an MCP client, connect to the `scihub` server, and call its search/download functions. Include clear comments explaining how it interacts with the MCP server.
+2. **Custom Tool Wrapper**: The project already contains a `tools/` folder with a script inside it. Read and inspect the existing `tools/scihub_tool.py` (and the underlying Sci-Hub MCP server logic if necessary). Ensure the script acts as a proper wrapper/tool definition that demonstrates how to programmatically initialize an MCP client, connect to the `scihub` server, and call its search/download functions.
 
 ## Step 3: Directory Setup
 1. Create a folder named `literature/` in the project root. This will be used to store source PDFs and downloaded articles.
