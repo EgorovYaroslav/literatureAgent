@@ -14,15 +14,36 @@ KEEP = {
 
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 
+def should_keep(path, rel):
+    """Check if a file or directory should be kept."""
+    # Check if this exact path is in KEEP
+    if rel in KEEP:
+        return True
+
+    # Check if this is a directory that contains kept files
+    if os.path.isdir(path):
+        for root, dirs, files in os.walk(path):
+            for file in files:
+                file_rel = os.path.relpath(os.path.join(root, file), PROJECT_ROOT)
+                if file_rel in KEEP:
+                    return True
+
+    return False
+
 def clean():
+    # First, remove everything that's not kept
     for entry in os.listdir(PROJECT_ROOT):
         path = os.path.join(PROJECT_ROOT, entry)
         rel = os.path.relpath(path, PROJECT_ROOT)
-        if rel in KEEP:
-            continue
-        # skip hidden files/dirs (.git, .venv, __pycache__ etc.)
+
+        # Skip hidden files/dirs (.git, .venv, __pycache__ etc.)
         if entry.startswith("."):
             continue
+
+        # Check if we should keep this
+        if should_keep(path, rel):
+            continue
+
         if os.path.isfile(path):
             os.remove(path)
             print(f"removed file: {rel}")
@@ -30,7 +51,7 @@ def clean():
             shutil.rmtree(path)
             print(f"removed dir:  {rel}")
 
-    # ensure required dirs exist
+    # Ensure required dirs exist
     for d in ["literature", "tools"]:
         os.makedirs(os.path.join(PROJECT_ROOT, d), exist_ok=True)
 
